@@ -1,6 +1,7 @@
 import Html exposing (..)
 import Html.App exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 
 -- main : Program Never
 main =
@@ -8,17 +9,22 @@ main =
 
 view : Model -> Html Msg
 view model =
-  div [] [ label [] [ text "Input"
-                    , input [type' "text"] []
-                    ]
+  div [] [ Html.form [ onSubmit SubmitText ] [ label [] [ text "Input"
+                              , input [type' "text"] []
+                              ]
+                   ]
+         , ul [] (List.map showList model)
          ]
 
-model = 0
+showList entry =
+  li [] [ text entry ]
+
+model = []
 
 update : Msg -> Model -> Model
 update msg model =
-  model
+  model ++ ["something added"]
 
-type alias Model = Int
+type alias Model = List String
 
-type Msg = None
+type Msg = SubmitText
