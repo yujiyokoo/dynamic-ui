@@ -9,22 +9,27 @@ main =
 
 view : Model -> Html Msg
 view model =
-  div [] [ Html.form [ onSubmit SubmitText ] [ label [] [ text "Input"
-                              , input [type' "text"] []
-                              ]
-                   ]
-         , ul [] (List.map showList model)
+  div [] [ Html.form [ onSubmit SubmitText, onInput Content ] [ label [] [ text "Input"
+                                                        , input [ type' "text", value model.curr_val ] []
+                                                        ]
+                                             ]
+         , ul [] (List.map showList model.list)
          ]
 
 showList entry =
   li [] [ text entry ]
 
-model = []
+model = { list = [], curr_val = "" }
 
 update : Msg -> Model -> Model
 update msg model =
-  model ++ ["something added"]
+  case msg of
+    SubmitText -> { model |list = model.list ++ [ model.curr_val ], curr_val = "" }
+    Content str -> { model | curr_val = str }
 
-type alias Model = List String
+type alias Model =
+  { list : List String
+  , curr_val : String
+  }
 
-type Msg = SubmitText
+type Msg = SubmitText | Content String
